@@ -9,18 +9,18 @@ const UserSchema = new Schema(
         trim: true
     },
         email: {
-            bsonType : "string",
+            type: String,
             unique: true,
             pattern : "@mongodb\.com$",
             trim: true
     },
-    friends: [
+      friends: [
       {
         type: Schema.Types.ObjectId,
         ref: "User"
       }],
 
-      thoughts: [
+      thought: [
         {
          type: Schema.Types.ObjectId,
          ref: 'Thought'
@@ -37,7 +37,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.virtual("friendCount").get(function() {
-  return this.thoughts.reduce((total, thoughts) => total + thoughts.reaction.length + 1, 0);
+  return this.friends.reduce((total, friends) => total + friends.length + 1, 0);
 })
 
 const User = model('User', UserSchema);

@@ -11,7 +11,7 @@ const ReactionSchema = new Schema(
           type: String,
           require: true,
       },
-      validate: [({length }) => length <=280, "280 Characters is the max"],
+      //validate: [({length }) => length <=280, "280 Characters is the max"],
       String:{
           type: String,
           require: true
@@ -23,7 +23,7 @@ const ReactionSchema = new Schema(
       },
     })
 
-const Thought = new Schema(
+const ThoughtSchema = new Schema(
     {
         thoughtText: {
             type: String,
@@ -52,6 +52,11 @@ const Thought = new Schema(
 
 
 
-Thought.virtual("reactionCount").get(function(){
+ThoughtSchema.virtual("reactionCount").get(function(){
     return this.reactions.length;
 });
+
+const Thought =model('Thought', ThoughtSchema)
+const Reaction = model('Reaction', ReactionSchema)
+
+module.exports = Thought, Reaction
