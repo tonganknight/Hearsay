@@ -1,5 +1,5 @@
 
-# Hearsay   undefined                       
+# Hearsay                          
 
 ## Description
 
@@ -33,7 +33,7 @@ Malachi Alusa
 
 ## License:
 
-For more information on the Licence on this Project visit undefined
+For more information on the Licence on this Project visit https://choosealicense.com/licenses/mit/
 
 ## Questions 
 
