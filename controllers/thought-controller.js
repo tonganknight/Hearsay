@@ -40,8 +40,8 @@ addThought({ params, body }, res) {
     .then ((addid) => {
         //console.log("this is it", body._id)
         return User.findOneAndUpdate(
-            {_id: body._id},
-            {$push: { thought:_id} },
+            {_id: body.userId},
+            {$push: { thought: body.userId} },
             { new: true },
         );
     })
@@ -55,7 +55,7 @@ addThought({ params, body }, res) {
     .catch(err => res.json(err));
 },
 updatethought({ params, body}, res) {
-    Thought.findOneAndUpdate({ _id: params }, body, { new: true, runValidators: true })
+    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
     .then(dbthoughtData => {
         if (!dbthoughtData) {
             res.status(404).json({ message: 'No Thought matches this Id'});
@@ -86,6 +86,40 @@ removethought({ params }, res) {
         res.json(dbthoughtData);
     })
     .catch(err => res.json(err));
+},
+addreaction({params, body}, res) {
+    console.log('this is your console.log', params.thoughtId)
+    console.log('this is your  2nd console.log', body)
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId }, 
+        { $push: { reactions: body}}, 
+        { new: true, runValidators: true })
+            
+    .then(dbthoughtData => {
+        if (!dbthoughtData) {
+            res.status(404).json({ message: 'No User matches this Id!'});
+            return;
+        }
+        res.json(dbthoughtData);
+    })
+    .catch(err => res.json(err));
+   
+},
+deletereaction({params}, res) {
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId }, 
+        { $pull: { reactions: {_id: params.reactionId}}}, 
+        { new: true, runValidators: true })
+            
+    .then(dbthoughtData => {
+        if (!dbthoughtData) {
+            res.status(404).json({ message: 'No User matches this Id!'});
+            return;
+        }
+        res.json(dbthoughtData);
+    })
+    .catch(err => res.json(err));
+{}
 }
 
 };

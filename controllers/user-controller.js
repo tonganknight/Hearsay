@@ -65,21 +65,43 @@ updateUser({ params, body }, res) {
       })
       .catch(err => res.status(400).json(err));
   },
-  addfriend({ params, body }, res) {
-    console.log(body);
-    User.findOne({username: body.username
-    })
-    .then(dbUserData => {
-      if(!dbUserData){
-        return res.status(404).json ({ message: "No User matches this query"})
-      }
+  addfriend({ params }, res) {
+    //console.log('this is the log', params.userId);
+    //console.log('this is the second log', params.id)
+    User.findOne({_id: params.userId
+    }).then(updateinfo => {
       return User.findOneAndUpdate(
-        {_id: params.id},
-        {$push:{ Friend: body.username}}
-        
+        {_id: params.userId},
+        {$push:{ friends: params.id}},
+        {new: true}  
       )
-    })
+    }).then(dbthoughtData => {
+      if (!dbthoughtData) {
+          res.status(404).json({ message: 'No User matches this Id!'});
+          return;
+      }
+      res.json(dbthoughtData);
+  })
+  .catch(err => res.json(err));
+    
+  },
+  deletefriend({ params}, res) {
+    User.findOne({_id: params.userId})
+    .then(updateinfo => {
+      return User.findOneAndUpdate(
+        {_id: params.userId},
+        {$pull: {friends: params.id}},
+      )
+    }).then(dbthoughtData => {
+      if (!dbthoughtData) {
+          res.status(404).json({ message: 'No User matches this Id!'});
+          return;
+      }
+      res.json(dbthoughtData);
+  })
+  .catch(err => res.json(err));
   }
+
   }
 
 module.exports = userController;
